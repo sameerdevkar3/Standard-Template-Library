@@ -278,22 +278,33 @@ void SinglyLL<T>::InsertAtPos(T No,int iPos)
         return;
     }
 
-    int i = 0;
-    NodeS<T> * Temp = First;
-    NodeS<T> * NewNodeS = NULL;
-    NewNodeS = new NodeS<T>;
-
-    NewNodeS->Data = No;
-    NewNodeS->Next = NULL;
-
-    for(i = 1; i < iPos-1; i++)
+    if(iPos == 1)
     {
-        Temp = Temp->Next;
+        InsertFirst(No);
     }
+    else if(iPos == Size+1)
+    {
+        InsertLast(No);
+    }
+    else
+    {
+        int i = 0;
+        NodeS<T> * Temp = First;
+        NodeS<T> * NewNodeS = NULL;
+        NewNodeS = new NodeS<T>;
 
-    NewNodeS->Next = Temp->Next;
-    Temp->Next = NewNodeS;
-    Size++;
+        NewNodeS->Data = No;
+        NewNodeS->Next = NULL;
+
+        for(i = 1; i < iPos-1; i++)
+        {
+            Temp = Temp->Next;
+        }
+
+        NewNodeS->Next = Temp->Next;
+        Temp->Next = NewNodeS;
+        Size++;
+    }
 }
 
 //////////////////////////////////////////////////////////
@@ -345,11 +356,11 @@ void SinglyLL<T>::DeleteLast()
     {
         return;
     }
-    else if(First->Next == NULL)
+    
+    if(First->Next == NULL)
     {
         delete First;
         First = NULL;
-        Size--;
     }
     else
     {
@@ -359,8 +370,8 @@ void SinglyLL<T>::DeleteLast()
         }
         delete Temp->Next;
         Temp->Next = NULL;
-        Size--;
     }
+    Size--;
 }
 
 //////////////////////////////////////////////////////////
@@ -375,11 +386,7 @@ void SinglyLL<T>::DeleteLast()
 template <class T>
 void SinglyLL<T>::DeleteAtPos(int iPos)
 {
-    int iCnt = 0;
-    NodeS<T> * Targeted = NULL;
-    NodeS<T> * Temp = First;
-
-    if((iPos < 1) || (iPos > Size+1))
+    if((iPos < 1) || (iPos > Size))
     {
         return;
     }
@@ -394,6 +401,10 @@ void SinglyLL<T>::DeleteAtPos(int iPos)
     }
     else
     {
+        int iCnt = 0;
+        NodeS<T> * Targeted = NULL;
+        NodeS<T> * Temp = First;
+
         for(iCnt = 1;iCnt < iPos-1;iCnt++)
         {
             Temp = Temp->Next;
@@ -588,23 +599,24 @@ void SinglyCL<T>::InsertAtPos(T No,int iPos)
 template <class T>
 void SinglyCL<T>::DeleteFirst()
 {
-    if(First == NULL)
+    if((First == NULL) || (Last == NULL))
     {
         return;
     }
 
-    if(First->Next == NULL)
+    if(First == Last)
     {
         delete First;
         First = NULL;
+        Last = NULL;
     }
     else
     {
         NodeS<T> * Temp = First;
         First = First->Next;
         delete Temp;
+        Last->Next = First;
     }
-    Last->Next = First;
     Size--;
 }
 
@@ -620,15 +632,16 @@ void SinglyCL<T>::DeleteFirst()
 template <class T>
 void SinglyCL<T>::DeleteLast()
 {
-    if(First == NULL)
+    if((First == NULL) || (Last == NULL))
     {
         return;
     }
 
-    if(First->Next == NULL)
+    if(First == Last)
     {
         delete First;
         First = NULL;
+        Last = NULL;
     }
     else
     {
@@ -656,7 +669,7 @@ void SinglyCL<T>::DeleteLast()
 template <class T>
 void SinglyCL<T>::DeleteAtPos(int iPos)
 {
-    if((iPos < 1) || (iPos > Size+1))
+    if((iPos < 1) || (iPos > Size))
     {
         return;
     }
@@ -696,6 +709,10 @@ void SinglyCL<T>::DeleteAtPos(int iPos)
 template <class T>
 void SinglyCL<T>::Display()
 {
+    if((First == NULL) || (Last == NULL))
+    {
+        return;
+    }
     NodeS<T> * Temp = First;
     do
     {
@@ -831,9 +848,13 @@ void DoublyLL<T>::InsertAtPos(T No,int iPos)
     }
 
     if(iPos == 1)
+    {
         InsertFirst(No);
+    }
     else if(iPos == Size+1)
+    {
         InsertLast(No);
+    }
     else
     {
         NodeD <T>* NewNodeD = new NodeD<T>;
@@ -931,7 +952,7 @@ void DoublyLL<T>::DeleteLast()
 template <class T>
 void DoublyLL<T>::DeleteAtPos(int iPos)
 {
-    if((iPos < 1) || (iPos > Size+1))
+    if((iPos < 1) || (iPos > Size))
     {
         return;
     }
@@ -952,8 +973,8 @@ void DoublyLL<T>::DeleteAtPos(int iPos)
             Temp = Temp->Next;
         }
         Temp->Next = Temp->Next->Next;
-        delete Temp->Prev;
-        Temp->Prev = Temp;
+        delete Temp->Next->Prev;
+        Temp->Next->Prev = Temp;
         Size--;
     }
 }
@@ -1088,6 +1109,7 @@ void DoublyCL<T>::InsertLast(T No)
         NewNodeD->Prev = Last;
         Last = NewNodeD;
     }
+
     Last->Next = First;
     First->Prev = Last;
     Size++;    
@@ -1216,7 +1238,7 @@ void DoublyCL<T>::DeleteLast()
 template <class T>
 void DoublyCL<T>::DeleteAtPos(int iPos)
 {
-    if((iPos < 1) || (iPos > Size+1))
+    if((iPos < 1) || (iPos > Size))
     {
         return;
     }
@@ -1258,6 +1280,11 @@ void DoublyCL<T>::DeleteAtPos(int iPos)
 template <class T>
 void DoublyCL<T>::Display()
 {
+    if((First == NULL) || (Last == NULL))
+    {
+        return;
+    }
+
     NodeD <T>* Temp = First;
     do
     {

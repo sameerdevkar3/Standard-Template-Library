@@ -869,6 +869,7 @@ void DoublyLL<T>::InsertAtPos(T No,int iPos)
         }
         NewNodeD->Next = Temp->Next;
         NewNodeD->Prev = Temp;
+        NewNodeD->Next->Prev = NewNodeD;
         Temp->Next = NewNodeD;
         Size++;
     }
